@@ -1,0 +1,35 @@
+body{
+    background-color: #87ceeb;
+    padding: 0px;
+    margin: 0px;
+    font-family: "Do Hyeon";
+}
+input[type="range"]{
+    width: 90%;
+    padding: 5% 5% 15% 5%;
+    position:fixed;
+    bottom: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    outline: none;
+    background-color: #efdd6f ;
+}
+input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    background-color: #dfcd5f;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+}
+h1,h2{
+    display: block;
+    text-align: center;
+    top: 0;
+    color: #69b0cd;
+}
+h1{
+    margin-bottom: 0;
+}
+h2{
+    margin-top: 0;
+}

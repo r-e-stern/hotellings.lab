@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="hotelling.css"/>
     <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="hotelling.js"></script>
     <title>Hotelling's Law -- an interactive simulator</title>
 </head>
 <body>
-<input type="range" min="0" max="100" />
+<header>
+<input type="range" min="0" max="100" onchange="change()"/>
 <h1>Hotelling's Law Simulator</h1>
 <h2>By R.E. Stern</h2>
+    <div id="our-stand"><span>ICE-CREAM!</span></div>
+    <div id="their-stand"><span>ICE-CREAM!</span></div>
+</header>
 </body>
 </html>

@@ -1,13 +1,22 @@
 body{
-    background-color: #87ceeb;
+    background-color: black;
     padding: 0px;
     margin: 0px;
     font-family: "Do Hyeon";
+
+}
+header{
+    height: 500px;
+    width: 800px;
+    padding-top: 10px;
+    position: relative;
+    background-color: #87ceeb;
+    margin: auto;
 }
 input[type="range"]{
     width: 90%;
-    padding: 5% 5% 15% 5%;
-    position:fixed;
+    padding: 2% 5% 15% 5%;
+    position: absolute;
     bottom: 0;
     margin: 0;
     -webkit-appearance: none;
@@ -20,16 +29,64 @@ input[type="range"]::-webkit-slider-thumb{
     width: 15px;
     height: 15px;
     border-radius: 15px;
+    z-index: 2;
 }
 h1,h2{
     display: block;
     text-align: center;
     top: 0;
     color: #69b0cd;
+    user-select: none;
 }
 h1{
     margin-bottom: 0;
 }
 h2{
     margin-top: 0;
+}
+#our-stand{
+    z-index: 3;
+}
+#their-stand{
+    z-index: 3;
+}
+#our-stand, #their-stand{
+    position: absolute;
+    height: 100px;
+    left: 49.9%;
+    bottom: 110px;
+    width: 2px;
+    margin-bottom: 20px;
+    background-color: black;
+}
+#our-stand span, #their-stand span{
+    width: 50px;
+    display: block;
+    padding: 3px;
+    color: white;
+    user-select: none;
+}
+#our-stand span{
+    background-color: #dd4444;
+}
+#their-stand span{
+    background-color: #44dd44;
+}
+.ball{
+    height: 10px;
+    width: 3px;
+    background-color: blue;
+    position: absolute;
+    bottom: 125px;
+    z-index: 1;
+    user-select: none;
+}
+.red{
+    background-color: #dd4444;
+}
+.green{
+    background-color: #44dd44;
+}
+.tie{
+    background-color: white;
 }

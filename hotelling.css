@@ -50,7 +50,7 @@ h2{
 #their-stand{
     z-index: 3;
 }
-#our-stand, #their-stand{
+#our-stand, #their-stand, #third-stand{
     position: absolute;
     height: 100px;
     left: 49.9%;
@@ -59,7 +59,7 @@ h2{
     margin-bottom: 20px;
     background-color: black;
 }
-#our-stand span, #their-stand span{
+#our-stand span, #their-stand span, #third-stand span{
     width: 50px;
     display: block;
     padding: 3px;
@@ -72,6 +72,9 @@ h2{
 #their-stand span{
     background-color: #44dd44;
 }
+#third-stand span{
+    background-color: #4444dd;
+}
 .ball{
     height: 10px;
     width: 3px;
@@ -80,6 +83,7 @@ h2{
     bottom: 125px;
     z-index: 1;
     user-select: none;
+    transition: 200ms;
 }
 .red{
     background-color: #dd4444;
@@ -89,4 +93,32 @@ h2{
 }
 .tie{
     background-color: white;
+}
+em{
+    position: absolute;
+    padding-left: 10px;
+}
+i{
+    display: inline-block;
+    border: 2px solid #69b0cd;
+    padding: 5px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    margin-right: 5px;
+    border-radius: 20px;
+    color: #69b0cd;
+    user-select: none;
+    transition: 200ms;
+}
+i:not(.selected):hover{
+    color: white;
+    border-color: white;
+}
+.selected{
+    background-color: white;
+    border-color: #87ceeb;
+    color: #87ceeb;
 }

@@ -8,7 +8,7 @@ function changeThree(){
     $("#our-stand").css("left",$("input").val()/100*88.125+5.9325+"%");
     $("#their-stand").css("left",hotellingOnetoTwo($("input").val())/100*88.125+5.9325+"%");
     $("#third-stand").css("left",hotellingOnetoThree($("input").val())/100*88.125+5.9325+"%");
-    //reconcile points
+    colorThreeBalls($("input").val(),hotellingOnetoTwo($("input").val()),hotellingOnetoThree($("input").val()));
 }
 
 $(document).ready(function(){
@@ -19,10 +19,12 @@ $(document).ready(function(){
             if(!$(this).is("i:first-of-type")){
                 $("header").append("<div id='third-stand'><span>ICE-CREAM!</span></div>");
                 $("input").attr("onchange","changeThree()");
+                $(".ball").removeClass().addClass("ball tie");
                 console.log("to 3");
             }else{
                 $("#third-stand").remove();
                 $("input").attr("onchange","change()");
+                $(".ball").removeClass().addClass("ball tie");
                 console.log("to 2");
             }
             $("i").toggleClass("selected");
@@ -61,7 +63,7 @@ function maxhotelling(opponent){
 
 function drawBalls(){
     for(var i=0; i<101; i++){
-        $("header").append("<nav class='ball' id='"+i+"'></nav>");
+        $("header").append("<nav class='ball tie' id='"+i+"'></nav>");
     }
     for(var i=0; i<101; i++){
         $("#"+i+"").css("left",i/100*88.125+5.9325+"%");
@@ -133,5 +135,23 @@ function hotellingOnetoTwo(a){
 
 function hotellingOnetoThree(a){
     return hotellingTwotoThree(a,hotellingOnetoTwo(a));
+}
+
+function colorThreeBalls(a,b,c){
+    var dist = [0,0,0];
+    for(var i=0; i<101; i++){
+        dist[0]=Math.abs(a-i);
+        dist[1]=Math.abs(b-i);
+        dist[2]=Math.abs(c-i);
+        if(dist[0]<dist[1] && dist[0]<dist[2]){
+            $("#"+i+"").removeClass().addClass("ball red");
+        }else if(dist[1]<dist[0] && dist[1]<dist[2]){
+            $("#"+i+"").removeClass().addClass("ball green");
+        }else if(dist[2]<dist[1] && dist[2]<dist[0]){
+            $("#"+i+"").removeClass().addClass("ball blue");
+        }else{
+            $("#"+i+"").removeClass().addClass("ball tie");
+        }
+    }
 }
 

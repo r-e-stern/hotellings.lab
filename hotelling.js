@@ -5,17 +5,19 @@ var NORMAL = [4.32,4.68,5.05,5.45,5.87,6.32,6.78,7.27,7.78,8.32,8.87,9.45,10.05,
     25.33,24.63,23.91,23.18,22.43,21.67,20.9,20.13,19.36,18.58,17.81,17.05,16.29,15.53,14.79,14.07,13.35,
     12.66,11.98,11.32,10.67,10.05,9.45,8.87,8.32,7.78,7.27,6.78,6.32,5.87,5.45,5.05,4.68,4.32];
 
+const range101 = [...Array(101).keys()];
+
 function change(){
     $("#our-stand").css("left",$("input").val()/100*88.125+5.9325+"%");
-    $("#their-stand").css("left",maxhotelling($("input").val())/100*88.125+5.9325+"%");
-    displayhotelling($("input").val(),maxhotelling($("input").val()));
+    $("#their-stand").css("left",maxh2($("input").val())/100*88.125+5.9325+"%");
+    disph($("input").val(),maxh2($("input").val()));
 }
 
 function changeThree(){
     $("#our-stand").css("left",$("input").val()/100*88.125+5.9325+"%");
-    $("#their-stand").css("left",hotellingOnetoTwo($("input").val())/100*88.125+5.9325+"%");
-    $("#third-stand").css("left",hotellingOnetoThree($("input").val())/100*88.125+5.9325+"%");
-    colorThreeBalls($("input").val(),hotellingOnetoTwo($("input").val()),hotellingOnetoThree($("input").val()));
+    $("#their-stand").css("left",h1to2($("input").val())/100*88.125+5.9325+"%");
+    $("#third-stand").css("left",h1to3($("input").val())/100*88.125+5.9325+"%");
+    col3balls($("input").val(),h1to2($("input").val()),h1to3($("input").val()));
 }
 
 $(document).ready(function(){
@@ -42,64 +44,31 @@ $(document).ready(function(){
     });
 });
 
-function centerHeader(){
-    $("header").css("top",($(window).height()-$("header").height()-10)/2+"px");
-}
+let centerHeader = () => $("header").css("top",($(window).height()-$("header").height()-10)/2+"px");
 
-function hotelling(yours,opponent) {
-    var score = 0;
-    for (var i = 0; i < 101; i++) {
-        if (Math.abs(yours - i) < Math.abs(opponent - i)) {
-            score++;
-        }else if(Math.abs(yours - i) == Math.abs(opponent - i)){
-            score+=.5;
-        }
-    }
-    return score;
-}
+let h2 = (y,o) => range101
+    .reduce((ack,crr) => (Math.abs(y - crr) < Math.abs(o - crr)) 
+        ? (ack+1) : (Math.abs(y - crr) == Math.abs(o - crr)) 
+        ? (ack+0.5) : ack, 0);
 
-function maxhotelling(opponent){
-    var max = [0,0];
-    for(var i=0; i<101; i++){
-        if((hotelling(i,opponent)>max[1]) && (Math.abs(i-opponent)>=5)){
-            max=[i,hotelling(i,opponent)];
-        }
-    }
-    return max[0];
-}
+let maxh2 = o => range101
+    .reduce((ack, crr) => (h2(crr,o)>ack[1]) && (Math.abs(crr-o)>=5) 
+        ? [crr,h2(crr,o)] : ack, [0,0])[0];
 
-function drawBalls(){
-    for(var i=0; i<101; i++){
+let drawBalls = () => range101.forEach((c,i) => {
         $("header").append("<nav class='ball tie' id='"+i+"'></nav>");
-    }
-    for(var i=0; i<101; i++){
         $("#"+i+"").css("left",i/100*88.125+5.9325+"%");
-    }
-}
+    });
 
-function ballsTo(n){
-    if(n==3){
-        for(var i=0; i<101; i++){
-            $("#"+i+"").css("height",NORMAL[i]+"px");
-        }
-    }else{
-        $(".ball").css("height","10px");
-    }
-}
+let ballsTo = n => n == 3 
+    ? range101.forEach((c,i) => {$("#"+i+"").css("height",NORMAL[i]+"px");}) 
+    : $(".ball").css("height","10px");
 
-function displayhotelling(yours, opponent){
-    for(var i=0; i<101; i++){
-        if (Math.abs(yours - i) < Math.abs(opponent - i)) {
-            $("#"+i+"").removeClass().addClass("ball red");
-        }else if(Math.abs(yours - i) == Math.abs(opponent - i)){
-            $("#"+i+"").removeClass().addClass("ball tie");
-        }else{
-            $("#"+i+"").removeClass().addClass("ball green");
-        }
-    }
-}
+let disph = (y, o) => range101.forEach((c,i) => {
+    $("#"+i+"").removeClass().addClass("ball " + ((Math.abs(y - i) < Math.abs(o - i)) ? "red" : (Math.abs(y - i) == Math.abs(o - i)) ? "tie" : "green"));
+});
 
-function hotellingThree(a,b,c){
+function h3(a,b,c){
     var score = [0,0,0];
     var dist = [0,0,0];
     for(var i=0; i<101; i++){
@@ -130,31 +99,17 @@ function hotellingThree(a,b,c){
     return score;
 }
 
-function hotellingTwotoThree(a,b){
-    var max = [0,0];
-    for(var i=0; i<101; i++){
-        if(hotellingThree(a,b,i)[2]>max[1] && (Math.abs(i-a)>=5) && (Math.abs(i-b)>=5)){
-            max = [i,hotellingThree(a,b,i)[2]];
-        }
-    }
-    return max[0];
-}
+let h2to3 = (a,b) => range101
+    .reduce((ack, crr) => h3(a,b,crr)[2]>ack[1] && (Math.abs(crr-a)>=5) && (Math.abs(crr-b)>=5) 
+        ? [crr,h3(a,b,crr)[2]] : ack, [0,0])[0];
 
-function hotellingOnetoTwo(a){
-    var max = [0,0];
-    for(var i=0; i<101; i++){
-        if(hotellingThree(a,i,hotellingTwotoThree(a,i))[1]>max[1] && (Math.abs(i-a)>=5)){
-            max = [i,hotellingThree(a,i,hotellingTwotoThree(a,i))[1]];
-        }
-    }
-    return max[0];
-}
+let h1to2 = a => range101
+    .reduce((ack,crr) => h3(a,crr,h2to3(a,crr))[1]>ack[1] && (Math.abs(crr-a)>=5) 
+        ? [crr,h3(a,crr,h2to3(a,crr))[1]] : ack, [0,0])[0];
 
-function hotellingOnetoThree(a){
-    return hotellingTwotoThree(a,hotellingOnetoTwo(a));
-}
+let h1to3 = (a) => h2to3(a,h1to2(a));
 
-function colorThreeBalls(a,b,c){
+function col3balls(a,b,c){
     var dist = [0,0,0];
     for(var i=0; i<101; i++){
         dist[0]=Math.abs(a-i);
@@ -171,4 +126,3 @@ function colorThreeBalls(a,b,c){
         }
     }
 }
-

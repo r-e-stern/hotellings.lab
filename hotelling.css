@@ -3,7 +3,6 @@ body{
     padding: 0px;
     margin: 0px;
     font-family: "Do Hyeon";
-
 }
 header{
     height: 500px;
@@ -44,10 +43,7 @@ h1{
 h2{
     margin-top: 0;
 }
-#our-stand{
-    z-index: 3;
-}
-#their-stand{
+#our-stand, #their-stand{
     z-index: 3;
 }
 #our-stand, #their-stand, #third-stand{
@@ -66,15 +62,6 @@ h2{
     color: white;
     user-select: none;
 }
-#our-stand span{
-    background-color: #dd4444;
-}
-#their-stand span{
-    background-color: #44dd44;
-}
-#third-stand span{
-    background-color: #4444dd;
-}
 .ball{
     height: 10px;
     width: 3px;
@@ -85,13 +72,13 @@ h2{
     user-select: none;
     transition: 200ms;
 }
-.red{
+.red, #our-stand span{
     background-color: #dd4444;
 }
-.green{
+.green, #their-stand span{
     background-color: #44dd44;
 }
-.blue{
+.blue, #third-stand span{
     background-color: #4444dd;
 }
 .tie{

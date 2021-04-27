@@ -1,23 +1,14 @@
-var NORMAL = [4.32,4.68,5.05,5.45,5.87,6.32,6.78,7.27,7.78,8.32,8.87,9.45,10.05,10.67,11.32,11.98,12.66
-    ,13.35,14.07,14.79,15.53,16.29,17.05,17.81,18.58,19.36,20.13,20.9,21.67,22.43,23.18,23.91,24.63,
-    25.33,26,26.66,27.28,27.88,28.44,28.97,29.46,29.91,30.32,30.69,31.01,31.28,31.51,31.69,31.81,31.89,
-    31.92,31.89,31.81,31.69,31.51,31.28,31.01,30.69,30.32,29.91,29.46,28.97,28.44,27.88,27.28,26.66,26,
-    25.33,24.63,23.91,23.18,22.43,21.67,20.9,20.13,19.36,18.58,17.81,17.05,16.29,15.53,14.79,14.07,13.35,
-    12.66,11.98,11.32,10.67,10.05,9.45,8.87,8.32,7.78,7.27,6.78,6.32,5.87,5.45,5.05,4.68,4.32];
-
 const range101 = [...Array(101).keys()];
+const NORMAL = range101.map(x => 5+1200*Math.exp(Math.pow(x-50,2)/-500)/Math.sqrt(Math.PI*500));
 
-function change(){
-    $("#our-stand").css("left",$("input").val()/100*88.125+5.9325+"%");
-    $("#their-stand").css("left",maxh2($("input").val())/100*88.125+5.9325+"%");
-    disph($("input").val(),maxh2($("input").val()));
-}
+let toleft = n => n/100*88.125+5.9325+"%";
 
-function changeThree(){
-    $("#our-stand").css("left",$("input").val()/100*88.125+5.9325+"%");
-    $("#their-stand").css("left",h1to2($("input").val())/100*88.125+5.9325+"%");
-    $("#third-stand").css("left",h1to3($("input").val())/100*88.125+5.9325+"%");
-    col3balls($("input").val(),h1to2($("input").val()),h1to3($("input").val()));
+let change = n => {
+    let v = $("input").val();
+    $("#our-stand").css("left",toleft(v));
+    $("#their-stand").css("left",toleft(n==2 ? maxh2(v) : h1to2(v)));
+    if(n==3){$("#third-stand").css("left",toleft(h1to3(v)));} 
+    n==2 ? col2balls(v,maxh2(v)) : col3balls(v,h1to2(v),h1to3(v));
 }
 
 $(document).ready(function(){
@@ -25,23 +16,15 @@ $(document).ready(function(){
     drawBalls();
     $("i").click(function(){
         if(!$(this).hasClass("selected")){
-            if(!$(this).is("i:first-of-type")){
-                $("header").append("<div id='third-stand'><span>ICE-CREAM!</span></div>");
-                $("input").attr("onchange","changeThree()");
-                $(".ball").removeClass().addClass("ball tie");
-                ballsTo(3);
-            }else{
-                $("#third-stand").remove();
-                $("input").attr("onchange","change()");
-                $(".ball").removeClass().addClass("ball tie");
-                ballsTo(2);
-            }
+            let clicked = !$(this).is("i:first-of-type") ? 3 : 2;
+            clicked == 3 ? $("header").append("<div id='third-stand'><span>ICE-CREAM!</span></div>") : $("#third-stand").remove();
+            $("input").attr("onchange","change("+clicked+")");
+            $(".ball").removeClass().addClass("ball tie");
+            ballsTo(clicked);
             $("i").toggleClass("selected");
         }
     });
-    $(window).resize(function(){
-        centerHeader();
-    });
+    $(window).resize(centerHeader);
 });
 
 let centerHeader = () => $("header").css("top",($(window).height()-$("header").height()-10)/2+"px");
@@ -64,40 +47,20 @@ let ballsTo = n => n == 3
     ? range101.forEach((c,i) => {$("#"+i+"").css("height",NORMAL[i]+"px");}) 
     : $(".ball").css("height","10px");
 
-let disph = (y, o) => range101.forEach((c,i) => {
-    $("#"+i+"").removeClass().addClass("ball " + ((Math.abs(y - i) < Math.abs(o - i)) ? "red" : (Math.abs(y - i) == Math.abs(o - i)) ? "tie" : "green"));
+let col2balls = (y, o) => range101.forEach((c,i) => {
+    $("#"+i+"").removeClass().addClass("ball "+((Math.abs(y-i)<Math.abs(o-i)) ? "red" : (Math.abs(y-i)==Math.abs(o-i)) ? "tie" : "green"));
 });
 
-function h3(a,b,c){
-    var score = [0,0,0];
-    var dist = [0,0,0];
-    for(var i=0; i<101; i++){
-        dist[0]=Math.abs(a-i);
-        dist[1]=Math.abs(b-i);
-        dist[2]=Math.abs(c-i);
-        if(dist[0]<dist[1] && dist[0]<dist[2]){
-            score[0]+=NORMAL[i];
-        }else if(dist[1]<dist[0] && dist[1]<dist[2]){
-            score[1]+=NORMAL[i];
-        }else if(dist[2]<dist[1] && dist[2]<dist[0]){
-            score[2]+=NORMAL[i];
-        }else if(dist[0]==dist[1] && dist[2]>dist[0]){
-            score[0]+=NORMAL[i]/2;
-            score[1]+=NORMAL[i]/2;
-        }else if(dist[0]==dist[2] && dist[1]>dist[0]){
-            score[0]+=NORMAL[i]/2;
-            score[2]+=NORMAL[i]/2;
-        }else if(dist[2]==dist[1] && dist[0]>dist[2]){
-            score[1]+=NORMAL[i]/2;
-            score[2]+=NORMAL[i]/2;
-        }else{
-            score[0]+=NORMAL[i]/3;
-            score[1]+=NORMAL[i]/3;
-            score[2]+=NORMAL[i]/3;
-        }
-    }
+let h3 = (a,b,c) => {
+    let score = [0,0,0];
+    range101.forEach((curr, i) => {
+        let dist = [Math.abs(a-i),Math.abs(b-i),Math.abs(c-i)]
+        let min = Math.min(...dist);
+        let mins = [0,1,2].filter(x => dist[x]==min);
+        mins.forEach(x => {score[x]+=NORMAL[i]/(mins.length);});
+    });
     return score;
-}
+};
 
 let h2to3 = (a,b) => range101
     .reduce((ack, crr) => h3(a,b,crr)[2]>ack[1] && (Math.abs(crr-a)>=5) && (Math.abs(crr-b)>=5) 
@@ -109,20 +72,9 @@ let h1to2 = a => range101
 
 let h1to3 = (a) => h2to3(a,h1to2(a));
 
-function col3balls(a,b,c){
-    var dist = [0,0,0];
-    for(var i=0; i<101; i++){
-        dist[0]=Math.abs(a-i);
-        dist[1]=Math.abs(b-i);
-        dist[2]=Math.abs(c-i);
-        if(dist[0]<dist[1] && dist[0]<dist[2]){
-            $("#"+i+"").removeClass().addClass("ball red");
-        }else if(dist[1]<dist[0] && dist[1]<dist[2]){
-            $("#"+i+"").removeClass().addClass("ball green");
-        }else if(dist[2]<dist[1] && dist[2]<dist[0]){
-            $("#"+i+"").removeClass().addClass("ball blue");
-        }else{
-            $("#"+i+"").removeClass().addClass("ball tie");
-        }
-    }
-}
+let col3balls = (a,b,c) => range101
+    .forEach((cur,i) => {$("#"+i+"").removeClass().addClass("ball "+pos3col(a,b,c,i));});
+
+let pos3col = (a,b,c,i) => (Math.abs(a-i)<Math.abs(b-i) && Math.abs(a-i)<Math.abs(c-i)) ? "red" :
+    (Math.abs(b-i)<Math.abs(a-i) && Math.abs(b-i)<Math.abs(c-i)) ? "green" :
+    (Math.abs(c-i)<Math.abs(b-i) && Math.abs(c-i)<Math.abs(a-i)) ? "blue" : "tie";
